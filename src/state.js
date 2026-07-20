@@ -50,3 +50,22 @@ export function allocationFlags(state) {
 
   return flags;
 }
+
+export function setRegionStatus(state, regionId, status) {
+  return {
+    ...state,
+    regions: {
+      ...state.regions,
+      [regionId]: { ...(state.regions[regionId] ?? {}), status }
+    }
+  };
+}
+
+export function upsertRecord(state, collection, record) {
+  const records = state[collection];
+  const index = records.findIndex(item => item.id === record.id);
+  const next = index < 0
+    ? [...records, record]
+    : records.map((item, itemIndex) => itemIndex === index ? { ...item, ...record } : item);
+  return { ...state, [collection]: next };
+}

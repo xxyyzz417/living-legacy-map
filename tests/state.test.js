@@ -4,7 +4,9 @@ import {
   createJourneyState,
   normaliseAmount,
   estateTotals,
-  allocationFlags
+  allocationFlags,
+  setRegionStatus,
+  upsertRecord
 } from '../src/state.js';
 
 test('creates an empty local-only journey', () => {
@@ -19,6 +21,21 @@ test('creates an empty local-only journey', () => {
     gifts: [],
     notes: []
   });
+});
+
+test('tracks explored, relevant and planned without completion pressure', () => {
+  let state = createJourneyState();
+  state = setRegionStatus(state, 'home', 'relevant');
+  state = setRegionStatus(state, 'home', 'planned');
+  assert.equal(state.regions.home.status, 'planned');
+});
+
+test('upserts one record without duplicating it', () => {
+  let state = createJourneyState();
+  state = upsertRecord(state, 'assets', { id: 'home-1', regionId: 'home', amount: 10 });
+  state = upsertRecord(state, 'assets', { id: 'home-1', regionId: 'home', amount: 20 });
+  assert.equal(state.assets.length, 1);
+  assert.equal(state.assets[0].amount, 20);
 });
 
 test('calculates assets, debts and negative net estate honestly', () => {

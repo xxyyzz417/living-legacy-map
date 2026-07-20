@@ -93,6 +93,15 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline
 .region-panel h1 { margin: 0; font-size: clamp(2rem, 5vw, 4.3rem); line-height: 1.16; }
 .region-copy { max-width: 35rem; margin: 1rem 0 0; color: var(--dim); font-size: clamp(1.05rem, 2vw, 1.3rem); }
 .region-actions, .destination-grid { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.25rem; }
+.region-actions button, .record-form button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .65rem 1rem;
+  color: var(--ink);
+  background: rgba(255,255,255,.05);
+  cursor: pointer;
+}
+.region-actions button:last-child { color: #1b1409; background: var(--gold); }
 .legal-signpost { margin-top: 1rem; }
 
 .map-controls { position: absolute; z-index: 5; left: 50%; bottom: 1.15rem; display: grid; grid-template-columns: auto minmax(10rem, 1fr) auto; align-items: center; gap: .75rem; width: min(44rem, calc(100% - 2rem)); transform: translateX(-50%); }
@@ -109,6 +118,20 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline
 dialog { width: min(38rem, calc(100% - 2rem)); border: 1px solid var(--line); border-radius: 1rem; padding: 1.5rem; color: var(--ink); background: #111c2b; }
 dialog::backdrop { background: rgba(0,0,0,.68); backdrop-filter: blur(5px); }
 .dialog-close { display: flex; justify-content: flex-end; }
+.record-form { display: grid; gap: 1rem; }
+.record-form label { display: grid; gap: .35rem; color: var(--dim); }
+.record-form label.check { display: flex; align-items: center; }
+.record-form input:not([type="checkbox"]), .record-form select {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: .55rem;
+  padding: .6rem .75rem;
+  color: var(--ink);
+  background: #0a1320;
+}
+.form-hint { margin: 0; color: var(--dim); }
+.form-error { min-height: 1.6em; margin: 0; color: #f2aaa0; }
 .report-template { display: none; color: #21190f; background: #fff; }
 
 @media (max-width: 720px) {
