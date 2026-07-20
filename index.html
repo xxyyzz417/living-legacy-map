@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="一段由你親自說出遺產方向的香港生前規劃旅程。">
+  <title>明日藏寶圖｜由你親自說出的遺產方向</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#journey-copy">跳到旅程內容</a>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="回到明日藏寶圖起點">
+      <span class="brand-mark" aria-hidden="true">✦</span>
+      <span>明日藏寶圖</span>
+    </a>
+    <div class="header-actions">
+      <button id="motion-toggle" class="text-button" type="button">減少動畫</button>
+      <button id="import-trigger" class="text-button" type="button">繼續我的旅程</button>
+      <input id="draft-file" type="file" accept="application/json,.legacy-map" hidden>
+    </div>
+  </header>
+
+  <main id="top">
+    <section id="map-stage" aria-labelledby="region-title">
+      <div id="map-camera" aria-hidden="true">
+        <div class="map-placeholder">
+          <span class="island island-home"></span>
+          <span class="island island-vault"></span>
+          <span class="island island-future"></span>
+          <span class="route-line"></span>
+        </div>
+        <img id="map-art" src="assets/treasure-map.webp" alt="">
+        <div id="fog-layer"></div>
+        <div id="route-glow"></div>
+      </div>
+
+      <article id="journey-copy" class="region-panel">
+        <p id="region-eyebrow" class="eyebrow">你的旅程</p>
+        <h1 id="region-title"></h1>
+        <p id="region-copy" class="region-copy"></p>
+        <div id="region-actions" class="region-actions"></div>
+        <div id="legal-signpost" class="legal-signpost"></div>
+      </article>
+
+      <nav class="map-controls" aria-label="地圖路線">
+        <button id="previous-region" type="button" disabled>上一處</button>
+        <p id="map-status" role="status" aria-live="polite"></p>
+        <button id="next-region" type="button">下一處</button>
+      </nav>
+    </section>
+
+    <div id="scroll-route" aria-hidden="true"></div>
+
+    <section id="destination-actions" class="destination-actions" hidden aria-labelledby="destination-title">
+      <p class="eyebrow">把方向保存下來</p>
+      <h2 id="destination-title">你的心願已經有了一張地圖</h2>
+      <div class="destination-grid">
+        <button id="download-light-draft" type="button">下載輕量草稿</button>
+        <button id="download-full-draft" type="button">下載完整加密草稿</button>
+        <button id="download-personal-pdf" type="button">下載我的心願地圖 PDF</button>
+        <button id="download-solicitor-pdf" type="button">下載給律師看的 PDF</button>
+      </div>
+      <button id="clear-data" class="danger-button" type="button">清除所有資料</button>
+    </section>
+  </main>
+
+  <dialog id="record-dialog" aria-labelledby="record-title">
+    <form method="dialog" class="dialog-close">
+      <button value="cancel" aria-label="關閉資料卡">關閉</button>
+    </form>
+    <h2 id="record-title"></h2>
+    <div id="record-body"></div>
+  </dialog>
+
+  <section id="personal-report" class="report-template" aria-label="我的心願地圖"></section>
+  <section id="solicitor-report" class="report-template" aria-label="給香港律師看的資料"></section>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
