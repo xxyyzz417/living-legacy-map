@@ -73,6 +73,20 @@
     <div id="record-body"></div>
   </dialog>
 
+  <dialog id="draft-password-dialog" aria-labelledby="draft-password-title">
+    <form method="dialog" class="dialog-close">
+      <button value="cancel" aria-label="關閉密碼視窗">關閉</button>
+    </form>
+    <h2 id="draft-password-title">保護完整草稿</h2>
+    <p id="draft-password-copy">完整草稿包含你填寫的金額。忘記密碼後無法恢復完整草稿。</p>
+    <form id="draft-password-form" class="record-form">
+      <label>密碼（至少 12 個字元）<input name="password" type="password" autocomplete="new-password" required minlength="12"></label>
+      <label id="draft-password-confirm-label">再次輸入密碼<input name="confirmation" type="password" autocomplete="new-password" minlength="12"></label>
+      <p id="draft-password-error" class="form-error" role="alert"></p>
+      <button id="draft-password-submit" type="submit">下載加密草稿</button>
+    </form>
+  </dialog>
+
   <section id="personal-report" class="report-template" aria-label="我的心願地圖"></section>
   <section id="solicitor-report" class="report-template" aria-label="給香港律師看的資料"></section>
 

@@ -4,6 +4,7 @@ import { createRevealController } from './reveal-controller.js';
 import { renderRecordForm, renderRegionPanel } from './ui.js';
 import { collectionForRecordType, recordFromValues } from './record-model.js';
 import { setRegionStatus, upsertRecord } from './state.js';
+import { decryptFullDraft, encryptFullDraft, lightDraft, parseLightDraft } from './draft.js';
 
 let state = createJourneyState();
 const route = document.querySelector('#scroll-route');
@@ -22,8 +23,13 @@ const destinationActions = document.querySelector('#destination-actions');
 const motionButton = document.querySelector('#motion-toggle');
 const regionActions = document.querySelector('#region-actions');
 const recordDialog = document.querySelector('#record-dialog');
+const passwordDialog = document.querySelector('#draft-password-dialog');
+const passwordForm = document.querySelector('#draft-password-form');
+const draftFile = document.querySelector('#draft-file');
 let recordOpener = null;
 let activeRegion = null;
+let passwordMode = 'export';
+let pendingEncryptedDraft = '';
 
 const controller = createRevealController({
   regions: REGIONS,
@@ -98,4 +104,89 @@ recordDialog.addEventListener('close', () => {
   const action = recordOpener?.dataset.regionAction;
   document.querySelector(`[data-region-id="${regionId}"][data-region-action="${action}"]`)?.focus();
   recordOpener = null;
+});
+
+function downloadText(text, filename, type = 'application/json') {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function validJourney(value) {
+  return value?.formatVersion === 1
+    && ['assets', 'debts', 'people', 'gifts', 'notes'].every(key => Array.isArray(value[key]))
+    && value.regions && typeof value.regions === 'object';
+}
+
+function restoreJourney(candidate) {
+  if (!validJourney(candidate)) throw new Error('草稿內容不完整，沒有取代你現在的旅程。');
+  state = candidate;
+  const index = REGIONS.findIndex(region => region.id === state.currentRegion);
+  controller.goTo(index < 0 ? 0 : index, { scroll: true });
+}
+
+document.querySelector('#download-light-draft').addEventListener('click', () => {
+  downloadText(lightDraft(state), '明日藏寶圖-輕量草稿.json');
+});
+
+document.querySelector('#download-full-draft').addEventListener('click', () => {
+  passwordMode = 'export';
+  passwordForm.reset();
+  document.querySelector('#draft-password-title').textContent = '保護完整草稿';
+  document.querySelector('#draft-password-copy').textContent = '完整草稿包含你填寫的金額。忘記密碼後無法恢復完整草稿。';
+  document.querySelector('#draft-password-confirm-label').hidden = false;
+  document.querySelector('#draft-password-submit').textContent = '下載加密草稿';
+  document.querySelector('#draft-password-error').textContent = '';
+  passwordDialog.showModal();
+});
+
+document.querySelector('#import-trigger').addEventListener('click', () => draftFile.click());
+
+draftFile.addEventListener('change', async () => {
+  const file = draftFile.files?.[0];
+  draftFile.value = '';
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const payload = JSON.parse(text);
+    if (payload?.kind === 'encrypted-full') {
+      pendingEncryptedDraft = text;
+      passwordMode = 'import';
+      passwordForm.reset();
+      document.querySelector('#draft-password-title').textContent = '開啟完整草稿';
+      document.querySelector('#draft-password-copy').textContent = '輸入建立完整草稿時使用的密碼。資料只會在這個裝置內解密。';
+      document.querySelector('#draft-password-confirm-label').hidden = true;
+      document.querySelector('#draft-password-submit').textContent = '開啟草稿';
+      document.querySelector('#draft-password-error').textContent = '';
+      passwordDialog.showModal();
+      return;
+    }
+    restoreJourney(parseLightDraft(text));
+  } catch (error) {
+    document.querySelector('#map-status').textContent = error.message || '草稿文件無法讀取。';
+  }
+});
+
+passwordForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const password = passwordForm.elements.password.value;
+  const error = document.querySelector('#draft-password-error');
+  error.textContent = '';
+  try {
+    if (passwordMode === 'export') {
+      if (password !== passwordForm.elements.confirmation.value) throw new Error('兩次輸入的密碼不相同。');
+      const encrypted = await encryptFullDraft(state, password);
+      downloadText(encrypted, '明日藏寶圖-完整加密草稿.legacy-map');
+    } else {
+      const candidate = await decryptFullDraft(pendingEncryptedDraft, password);
+      restoreJourney(candidate);
+      pendingEncryptedDraft = '';
+    }
+    passwordDialog.close('completed');
+  } catch (problem) {
+    error.textContent = problem.message;
+  }
 });

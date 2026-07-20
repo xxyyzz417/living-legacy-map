@@ -19,3 +19,9 @@ test('does not contain the memorial-game framing', async () => {
     assert.equal(html.includes(term), false, `unexpected old term: ${term}`);
   }
 });
+
+test('includes an explicit password step for private full drafts', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  assert.match(html, /id=["']draft-password-dialog["']/);
+  assert.match(html, /忘記密碼後無法恢復完整草稿/);
+});
