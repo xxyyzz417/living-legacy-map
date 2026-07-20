@@ -25,3 +25,9 @@ test('includes an explicit password step for private full drafts', async () => {
   assert.match(html, /id=["']draft-password-dialog["']/);
   assert.match(html, /忘記密碼後無法恢復完整草稿/);
 });
+
+test('keeps exact amounts out of the personal PDF unless explicitly selected', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  assert.match(html, /id=["']include-personal-amounts["']/);
+  assert.match(html, /type=["']checkbox["']/);
+});

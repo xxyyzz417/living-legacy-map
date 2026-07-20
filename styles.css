@@ -114,6 +114,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline
 .destination-actions h2 { max-width: 18ch; font-size: clamp(2rem, 5vw, 4rem); line-height: 1.15; }
 .destination-grid button, .danger-button { border: 1px solid var(--line); border-radius: .8rem; padding: .9rem 1.1rem; color: var(--ink); background: rgba(255,255,255,.05); }
 .danger-button { margin-top: 2rem; color: #e9b4ad; }
+.pdf-option { display: flex; gap: .6rem; align-items: center; margin-top: 1.5rem; color: var(--dim); }
 
 dialog { width: min(38rem, calc(100% - 2rem)); border: 1px solid var(--line); border-radius: 1rem; padding: 1.5rem; color: var(--ink); background: #111c2b; }
 dialog::backdrop { background: rgba(0,0,0,.68); backdrop-filter: blur(5px); }
@@ -133,6 +134,18 @@ dialog::backdrop { background: rgba(0,0,0,.68); backdrop-filter: blur(5px); }
 .form-hint { margin: 0; color: var(--dim); }
 .form-error { min-height: 1.6em; margin: 0; color: #f2aaa0; }
 .report-template { display: none; color: #21190f; background: #fff; }
+.pdf-export {
+  display: block !important;
+  width: 190mm;
+  padding: 12mm;
+  color: #21190f;
+  background: #fff;
+  font-family: "Microsoft JhengHei", sans-serif;
+}
+.pdf-export h1, .pdf-export h2 { break-after: avoid; }
+.pdf-export table { width: 100%; border-collapse: collapse; }
+.pdf-export th, .pdf-export td { border: 1px solid #8a7b65; padding: .45rem; vertical-align: top; text-align: left; }
+.report-disclaimer { padding: .75rem; border: 1px solid #8a7b65; }
 
 @media (max-width: 720px) {
   body { font-size: 16px; }
@@ -157,6 +170,6 @@ dialog::backdrop { background: rgba(0,0,0,.68); backdrop-filter: blur(5px); }
 }
 
 @media print {
-  .site-header, #map-stage, #scroll-route, .destination-actions, dialog { display: none !important; }
+  body > *:not(.report-template[data-print-target="true"]) { display: none !important; }
   .report-template[data-print-target="true"] { display: block !important; }
 }

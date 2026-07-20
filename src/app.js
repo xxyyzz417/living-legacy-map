@@ -5,6 +5,8 @@ import { renderRecordForm, renderRegionPanel } from './ui.js';
 import { collectionForRecordType, recordFromValues } from './record-model.js';
 import { setRegionStatus, upsertRecord } from './state.js';
 import { decryptFullDraft, encryptFullDraft, lightDraft, parseLightDraft } from './draft.js';
+import { personalReportModel, renderReport, solicitorReportModel } from './report.js';
+import { downloadReportPdf, reportFilename } from './pdf.js';
 
 let state = createJourneyState();
 const route = document.querySelector('#scroll-route');
@@ -190,3 +192,26 @@ passwordForm.addEventListener('submit', async event => {
     error.textContent = problem.message;
   }
 });
+
+async function exportReport(kind) {
+  const isPersonal = kind === 'personal';
+  const root = document.querySelector(isPersonal ? '#personal-report' : '#solicitor-report');
+  const model = isPersonal
+    ? personalReportModel(state, {
+      includeAmounts: document.querySelector('#include-personal-amounts').checked
+    })
+    : solicitorReportModel(state, []);
+  renderReport(model, root);
+  root.classList.add('pdf-export');
+  document.querySelector('#map-status').textContent = '正在準備 PDF…';
+  try {
+    await downloadReportPdf(root, reportFilename(kind));
+    document.querySelector('#map-status').textContent = 'PDF 已準備完成。';
+  } finally {
+    root.classList.remove('pdf-export');
+    root.replaceChildren();
+  }
+}
+
+document.querySelector('#download-personal-pdf').addEventListener('click', () => exportReport('personal'));
+document.querySelector('#download-solicitor-pdf').addEventListener('click', () => exportReport('solicitor'));
