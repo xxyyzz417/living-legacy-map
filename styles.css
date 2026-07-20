@@ -125,6 +125,14 @@ dialog::backdrop { background: rgba(0,0,0,.68); backdrop-filter: blur(5px); }
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
 
+[data-motion="reduced"] *,
+[data-motion="reduced"] *::before,
+[data-motion="reduced"] *::after {
+  scroll-behavior: auto !important;
+  transition-duration: .01ms !important;
+  animation-duration: .01ms !important;
+}
+
 @media print {
   .site-header, #map-stage, #scroll-route, .destination-actions, dialog { display: none !important; }
   .report-template[data-print-target="true"] { display: block !important; }

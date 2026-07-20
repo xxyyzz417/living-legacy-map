@@ -16,3 +16,8 @@ export function cameraVariables(camera) {
     '--fog-y': `${camera.y}%`
   };
 }
+
+export function navigationIndex(current, direction, count) {
+  const delta = direction === 'next' ? 1 : direction === 'previous' ? -1 : 0;
+  return clampRegionIndex(current + delta, count);
+}
