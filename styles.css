@@ -103,6 +103,10 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline
 }
 .region-actions button:last-child { color: #1b1409; background: var(--gold); }
 .legal-signpost { margin-top: 1rem; }
+.signpost-card { border-top: 1px solid var(--line); padding-top: .8rem; color: var(--dim); }
+.signpost-card summary { min-height: 44px; color: var(--gold); cursor: pointer; }
+.signpost-card p { margin: .5rem 0; font-size: .92rem; }
+.signpost-card a { color: var(--ink); font-size: .82rem; }
 
 .map-controls { position: absolute; z-index: 5; left: 50%; bottom: 1.15rem; display: grid; grid-template-columns: auto minmax(10rem, 1fr) auto; align-items: center; gap: .75rem; width: min(44rem, calc(100% - 2rem)); transform: translateX(-50%); }
 .map-controls p { margin: 0; color: var(--dim); text-align: center; }

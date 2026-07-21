@@ -37,14 +37,14 @@ export function allocationFlags(state) {
   if (allocated > Math.max(estimatedNet, 0)) {
     flags.push({
       code: 'over-allocated',
-      message: '已记录的金额高于初步估算净遗产，值得带给香港律师确认。'
+      message: '已記錄的金額高於初步估算淨遺產，值得帶給香港律師確認。'
     });
   }
 
   if (estimatedNet < 0) {
     flags.push({
       code: 'negative-net',
-      message: '目前记录的债务高于资产；这只是初步整理，值得进一步确认。'
+      message: '目前記錄的債務高於資產；這只是初步整理，值得進一步確認。'
     });
   }
 

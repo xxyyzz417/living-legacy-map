@@ -7,6 +7,7 @@ import { setRegionStatus, upsertRecord } from './state.js';
 import { decryptFullDraft, encryptFullDraft, lightDraft, parseLightDraft } from './draft.js';
 import { personalReportModel, renderReport, solicitorReportModel } from './report.js';
 import { downloadReportPdf, reportFilename } from './pdf.js';
+import { signalsForState } from './legal-signals.js';
 
 let state = createJourneyState();
 const route = document.querySelector('#scroll-route');
@@ -39,7 +40,7 @@ const controller = createRevealController({
     state.currentRegion = region.id;
     state.regions[region.id] ??= { status: 'explored' };
     activeRegion = region;
-    renderRegionPanel(region, state.regions[region.id]);
+    renderRegionPanel(region, state.regions[region.id], signalsForState(state));
     document.querySelector('#map-status').textContent = `已抵達：${region.name}`;
     previousButton.disabled = index === 0;
     nextButton.disabled = index === REGIONS.length - 1;
@@ -71,7 +72,7 @@ regionActions.addEventListener('click', event => {
   if (!button || !activeRegion?.recordType) return;
   if (button.dataset.regionAction === 'relevant') {
     state = setRegionStatus(state, activeRegion.id, 'relevant');
-    renderRegionPanel(activeRegion, state.regions[activeRegion.id]);
+    renderRegionPanel(activeRegion, state.regions[activeRegion.id], signalsForState(state));
     return;
   }
   if (button.dataset.regionAction !== 'plan') return;
@@ -92,7 +93,7 @@ regionActions.addEventListener('click', event => {
       }, values);
       state = upsertRecord(state, collectionForRecordType(activeRegion.recordType), record);
       state = setRegionStatus(state, activeRegion.id, 'planned');
-      renderRegionPanel(activeRegion, state.regions[activeRegion.id]);
+      renderRegionPanel(activeRegion, state.regions[activeRegion.id], signalsForState(state));
       recordDialog.close('saved');
     } catch (error) {
       document.querySelector('#record-error').textContent = error.message;
@@ -200,7 +201,7 @@ async function exportReport(kind) {
     ? personalReportModel(state, {
       includeAmounts: document.querySelector('#include-personal-amounts').checked
     })
-    : solicitorReportModel(state, []);
+    : solicitorReportModel(state, signalsForState(state));
   renderReport(model, root);
   root.classList.add('pdf-export');
   document.querySelector('#map-status').textContent = '正在準備 PDF…';

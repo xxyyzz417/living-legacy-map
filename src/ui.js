@@ -1,4 +1,4 @@
-export function renderRegionPanel(region, regionState = {}) {
+export function renderRegionPanel(region, regionState = {}, signals = []) {
   document.querySelector('#region-title').textContent = region.name;
   document.querySelector('#region-copy').textContent = region.copy;
   document.querySelector('#region-eyebrow').textContent = regionState.status === 'planned'
@@ -10,7 +10,24 @@ export function renderRegionPanel(region, regionState = {}) {
   const actions = document.querySelector('#region-actions');
   actions.replaceChildren();
   const signpost = document.querySelector('#legal-signpost');
-  signpost.textContent = '';
+  signpost.replaceChildren();
+  for (const signal of signals.filter(item => item.regions.includes(region.id))) {
+    const details = document.createElement('details');
+    details.className = 'signpost-card';
+    const summary = document.createElement('summary');
+    summary.textContent = signal.title;
+    const copy = document.createElement('p');
+    copy.textContent = signal.summary;
+    const question = document.createElement('p');
+    question.textContent = `可以問律師：${signal.lawyerQuestion}`;
+    const source = document.createElement('a');
+    source.href = signal.sourceUrl;
+    source.target = '_blank';
+    source.rel = 'noreferrer';
+    source.textContent = `${signal.sourceName}（核對日期 ${signal.verifiedOn}）`;
+    details.append(summary, copy, question, source);
+    signpost.append(details);
+  }
   if (!region.recordType) return;
 
   for (const [action, label] of [
