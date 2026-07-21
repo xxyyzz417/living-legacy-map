@@ -117,9 +117,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline
 .signpost-card p { margin: .5rem 0; font-size: .92rem; }
 .signpost-card a { color: var(--ink); font-size: .82rem; }
 
-.map-controls { position: absolute; z-index: 5; left: 50%; bottom: 1.15rem; display: grid; grid-template-columns: auto minmax(10rem, 1fr) auto; align-items: center; gap: .75rem; width: min(44rem, calc(100% - 2rem)); transform: translateX(-50%); }
+.map-controls { position: absolute; z-index: 5; left: 50%; bottom: 1.15rem; width: min(44rem, calc(100% - 2rem)); transform: translateX(-50%); pointer-events: none; }
 .map-controls p { margin: 0; color: var(--dim); text-align: center; }
-.map-controls button:disabled { opacity: .35; cursor: not-allowed; }
 #scroll-route { position: relative; z-index: 4; pointer-events: none; }
 .scroll-sentinel { height: 95svh; }
 
@@ -167,7 +166,7 @@ dialog::backdrop { background: rgba(0,0,0,.68); backdrop-filter: blur(5px); }
   .brand { min-height: 48px; }
   .header-actions { flex-direction: column; }
   .region-panel { left: 1rem; right: 1rem; bottom: 5.5rem; width: auto; max-height: 58svh; overflow: auto; }
-  .map-controls { bottom: .55rem; grid-template-columns: auto 1fr auto; }
+  .map-controls { bottom: .55rem; }
   .map-controls p { font-size: .8rem; }
 }
 

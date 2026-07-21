@@ -20,8 +20,6 @@ route.replaceChildren(...REGIONS.map((region, index) => {
   return marker;
 }));
 
-const previousButton = document.querySelector('#previous-region');
-const nextButton = document.querySelector('#next-region');
 const destinationActions = document.querySelector('#destination-actions');
 const motionButton = document.querySelector('#motion-toggle');
 const regionActions = document.querySelector('#region-actions');
@@ -42,14 +40,9 @@ const controller = createRevealController({
     activeRegion = region;
     renderRegionPanel(region, state.regions[region.id], signalsForState(state));
     document.querySelector('#map-status').textContent = `已抵達：${region.name}`;
-    previousButton.disabled = index === 0;
-    nextButton.disabled = index === REGIONS.length - 1;
     destinationActions.hidden = region.id !== 'destination';
   }
 });
-
-previousButton.addEventListener('click', controller.previous);
-nextButton.addEventListener('click', controller.next);
 
 document.addEventListener('keydown', event => {
   const tag = event.target.tagName;

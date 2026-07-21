@@ -31,3 +31,10 @@ test('keeps exact amounts out of the personal PDF unless explicitly selected', a
   assert.match(html, /id=["']include-personal-amounts["']/);
   assert.match(html, /type=["']checkbox["']/);
 });
+
+test('uses the long scroll instead of next-page controls', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  assert.match(html, /id=["']scroll-route["']/);
+  assert.doesNotMatch(html, /id=["'](?:previous|next)-region["']/);
+  assert.doesNotMatch(html, />下一處<|>上一處</);
+});
