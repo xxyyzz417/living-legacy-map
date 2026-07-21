@@ -133,6 +133,7 @@ dialog { width: min(38rem, calc(100% - 2rem)); border: 1px solid var(--line); bo
 dialog::backdrop { background: rgba(0,0,0,.68); backdrop-filter: blur(5px); }
 .dialog-close { display: flex; justify-content: flex-end; }
 .record-form { display: grid; gap: 1rem; }
+.record-form [hidden] { display: none !important; }
 .record-form label { display: grid; gap: .35rem; color: var(--dim); }
 .record-form label.check { display: flex; align-items: center; }
 .record-form input:not([type="checkbox"]), .record-form select {
