@@ -66,7 +66,16 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline
     radial-gradient(circle at 42% 34%, rgba(184, 140, 72, .28), transparent 20%),
     linear-gradient(145deg, #2e2a21 0%, #182331 48%, #07101c 100%);
 }
-#map-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }
+#map-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .46;
+  filter: sepia(1) saturate(.7) contrast(1.18) brightness(.7);
+  mix-blend-mode: soft-light;
+}
 .map-placeholder { position: absolute; inset: 0; overflow: hidden; opacity: .7; }
 .island { position: absolute; display: block; border: 1px solid rgba(223,189,114,.42); border-radius: 48% 52% 56% 44%; background: radial-gradient(circle at 35% 30%, #796443, #2f3c35 58%, #14221f); box-shadow: 0 0 45px rgba(223,189,114,.12); }
 .island-home { left: 19%; top: 19%; width: 24%; height: 18%; transform: rotate(-9deg); }
