@@ -115,7 +115,7 @@ function downloadText(text, filename, type = 'application/json') {
   link.href = url;
   link.download = filename;
   link.click();
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
 function validJourney(value) {
@@ -169,7 +169,9 @@ draftFile.addEventListener('change', async () => {
     }
     restoreJourney(parseLightDraft(text));
   } catch (error) {
-    document.querySelector('#map-status').textContent = error.message || '草稿文件無法讀取。';
+    document.querySelector('#map-status').textContent = error instanceof SyntaxError
+      ? '草稿文件無法讀取。'
+      : error.message || '草稿文件無法讀取。';
   }
 });
 
@@ -216,3 +218,10 @@ async function exportReport(kind) {
 
 document.querySelector('#download-personal-pdf').addEventListener('click', () => exportReport('personal'));
 document.querySelector('#download-solicitor-pdf').addEventListener('click', () => exportReport('solicitor'));
+
+document.querySelector('#clear-data').addEventListener('click', () => {
+  if (!globalThis.confirm('要清除這次旅程中填寫的所有資料嗎？已下載的草稿不會受影響。')) return;
+  state = createJourneyState();
+  controller.goTo(0, { scroll: true });
+  document.querySelector('#map-status').textContent = '這個頁面內的資料已清除。';
+});

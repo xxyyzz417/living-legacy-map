@@ -57,10 +57,18 @@ export function renderRecordForm(region) {
     <label data-amount-field>金額（港幣）<input name="amount" inputmode="decimal" placeholder="例如 8000000"></label>
     ${region.recordType === 'asset' ? '<label>希望去向<input name="destination" placeholder="例如伴侶、子女、某個用途"></label><label class="check"><input type="checkbox" name="joint"> 這是聯名或共同持有</label><label class="check"><input type="checkbox" name="mortgage"> 可能有按揭或抵押</label><label class="check"><input type="checkbox" name="overseas"> 這項資產在香港以外</label>' : ''}
     ${region.recordType === 'person' ? '<label>想照顧的方式<input name="protectionType" placeholder="例如生活費、教育、居所"></label>' : ''}
-    ${region.recordType === 'gift' ? '<label>你想支持的方向<select name="cause"><option value="none">我暫時不安排公益遺贈</option><option value="community">社區與照顧</option><option value="environment">環境與動物</option><option value="education">教育與研究</option><option value="other">其他</option></select></label><label>機構或方向（可稍後補）<input name="organisation"></label>' : ''}
+    ${region.recordType === 'gift' ? '<label>你想支持的方向<select name="cause"><option value="undecided">我還未決定</option><option value="none">我不安排公益遺贈</option><option value="community">社區與照顧</option><option value="environment">環境與動物</option><option value="education">教育與研究</option><option value="other">其他</option></select></label><label>機構或方向（可稍後補）<input name="organisation"></label>' : ''}
     <p id="record-error" class="form-error" role="alert"></p>
     <button type="submit">記下這份安排</button>
   `;
   body.append(form);
+  const amountMode = form.elements.amountMode;
+  const amountField = form.querySelector('[data-amount-field]');
+  const updateAmountVisibility = () => {
+    amountField.hidden = amountMode.value !== 'exact';
+    form.elements.amount.required = amountMode.value === 'exact';
+  };
+  amountMode.addEventListener('change', updateAmountVisibility);
+  updateAmountVisibility();
   return form;
 }

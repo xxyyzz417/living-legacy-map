@@ -58,6 +58,12 @@ function displayValue(value) {
   return String(value);
 }
 
+const FIELD_LABELS = {
+  amountMode: '金額狀態', amount: '金額', destination: '希望去向', joint: '聯名持有',
+  mortgage: '按揭或抵押', overseas: '香港以外', protectionType: '照顧方式',
+  organisation: '機構或方向', declined: '不安排公益遺贈'
+};
+
 function appendRecords(root, heading, records) {
   root.append(element('h2', heading));
   if (!records.length) {
@@ -72,7 +78,7 @@ function appendRecords(root, heading, records) {
     label.scope = 'row';
     const details = Object.entries(record)
       .filter(([key]) => !['id', 'regionId', 'label', 'cause'].includes(key))
-      .map(([key, value]) => `${key}：${displayValue(value)}`)
+      .map(([key, value]) => `${FIELD_LABELS[key] ?? key}：${displayValue(value)}`)
       .join('；');
     row.append(label, element('td', details || '已記下方向'));
     body.append(row);
